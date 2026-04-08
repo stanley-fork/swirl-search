@@ -140,8 +140,11 @@ Use **SWIRL Enterprise Edition** when you have:
 
 # How Can I Obtain SWIRL Enterprise Edition? 
 
-* Use the [Azure Marketplace Offer](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/swirlcorporation1684335149355.swirl_vm_offer_poc?tab=Overview) to spin-up a Virtual Machine in minutes!
-* [Contact SWIRL](mailto:hello@swirlaiconnect.com) for a license key, or delivery on any other platform.
+* Use the [SWIRL AI Legal Azure Marketplace Offer](https://marketplace.microsoft.com/en-us/product/virtual-machine/swirlcorporation1684335149355.swirl_legal_vm_offer?tab=Overview) to install SWIRL AI Legal on a private virtual machine (VM) in your firm's Azure tenant in minutes. 
+
+* Use the [SWIRL AI Enterprise Azure Marketplace Offer](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/swirlcorporation1684335149355.swirl_vm_offer_poc?tab=Overview) to install SWIRL AI Enterprise on a private VM in your company's Azure tenant in minutes.
+
+* [Contact SWIRL](mailto:hello@swirlaiconnect.com) for a license key, or delivery on any other platform via Docker Compose/Public Helm Chart. 
 
 # How Can I Get Help With SWIRL?
 
@@ -165,9 +168,11 @@ SWIRL is typically deployed using **Docker**, with **Docker Compose** for easy s
 
 For **SWIRL Enterprise**, deployments are also available as **Kubernetes images**, allowing for scalable, containerized orchestration.  
 
-# Does SWIRL Offer Hosting?  
+# What is the history of SWIRL?
 
-Yes! For details about **SWIRL Cloud**, please [contact us](mailto:hello@swirlaiconnect.com).
+SWIRL was created by [Sid Probstein](https://www.linkedin.com/in/sidprobstein/) in 2023. [SWIRL](https://swirlaiconnect.com/) was incorporated in 2024 to provide support, services and enterprise-grade versions of SWIRL under commercial license. Sid serves as SWIRL's CEO.
+
+As of 2026, SWIRL is focused on [AI Legal Search](https://swirllegal.com/). 
 
 {% if site.enableSwirlChat %}
 ## Ask SWIRL
