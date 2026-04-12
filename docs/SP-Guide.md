@@ -1,7 +1,7 @@
 ---
 layout: default
 title: SearchProviders
-nav_order: 19
+nav_order: 15
 ---
 <details markdown="block">
   <summary>
@@ -67,6 +67,32 @@ To activate a SearchProvider [edit it using the Admin Console](#editing-a-search
 
 Click the "SAVE" button, at the bottom of the page, to commit this change.
 
+## Activating a Google Programmable Search Engine (PSE) SearchProvider
+
+Google Programmable Search Engine (PSE) allows you to search specific websites or the entire web. SWIRL includes inactive SearchProviders for Google Web Search and SWIRL Documentation that use PSE, but they require a Google API key to activate.
+
+To activate a Google PSE SearchProvider:
+
+1. **Obtain a Google API Key**:
+   - Visit the [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select an existing one
+   - Enable the **Programmable Search API**
+   - Create an API key in the Credentials section
+
+2. **Activate in SWIRL**:
+   - Navigate to the Admin Console at [http://localhost:8000/admin/](http://localhost:8000/admin/)
+   - Click on **SearchProviders**
+   - Find the Google PSE SearchProvider you want to activate (e.g., "Google Web Search" or "SWIRL Documentation")
+   - Click to edit it
+   - Check the `active` field
+   - In the `credentials` field, paste your Google API key
+   - Click **SAVE** to commit the changes
+
+3. **Verify Activation**:
+   - Return to the SearchProvider list
+   - Confirm that the Google PSE SearchProvider now shows as "Active"
+   - You can now search using this provider
+
 # Adding SearchProviders
 
 ## Using the Admin Console
@@ -79,7 +105,7 @@ Click the "Add SearchProvider" button at the top/right of the SearchProvider lis
 
 ![SWIRL admin console showing Add SearchProvider](images/swirl_admin_console_sp_list_add.png)
 
-Fill in the field(s) with the appropriate values for your SearchProvider. [Contact SWIRL](#support) for assistance.
+Fill in the field(s) with the appropriate values for your SearchProvider. [contact SWIRL](mailto:hello@swirlaiconnect.com) for assistance.
 
 ## Via Copy/Paste
 
@@ -599,7 +625,7 @@ The **JSON result schema** is defined in:
 - [`swirl/processors/utils.py`](https://github.com/swirlai/swirl-search/tree/main/swirl/processors/utils.py)
 - [`swirl/models.py`](https://github.com/swirlai/swirl-search/tree/main/swirl/models.py)
 
-[Result Mixers](./Developer-Reference#mixers-1) further process and merge data from multiple sources.
+[Result Mixers](./Developer-Reference#mixers) further process and merge data from multiple sources.
 
 # PAYLOAD Field
 
@@ -616,11 +642,161 @@ To **exclude unnecessary fields** from PAYLOAD:
 {: .highlight }
 SWIRL copies all source data to PAYLOAD **by default** unless `NO_PAYLOAD` is specified.
 
+# Vector Database SearchProviders
+
+## Pinecone
+
+SWIRL supports querying Pinecone vector databases using the `PineconeDB` connector. This connector extends the VectorDBConnector base class and queries Pinecone indexes using vector similarity search.
+
+**Example SearchProvider:**
+
+```json
+{
+    "name": "Documents - PineconeDB",
+    "connector": "PineconeDB",
+    "url": "<your-pinecone-index-name>",
+    "credentials": "<your-pinecone-api-key>",
+    "query_processors": [
+        "AdaptiveQueryProcessor"
+    ],
+    "query_mappings": "",
+    "result_processors": [
+        "MappingResultProcessor",
+        "AutomaticPayloadMapperResultProcessor",
+        "CosineRelevancyResultProcessor"
+    ],
+    "response_mappings": "",
+    "result_mappings": "NO_PAYLOAD",
+    "tags": [
+        "Pinecone",
+        "VectorDB"
+    ],
+    "active": true,
+    "default": false
+}
+```
+
+**Configuration Notes:**
+
+- Set `url` to your Pinecone index name.
+- Set `credentials` to your Pinecone API key.
+- The `AutomaticPayloadMapperResultProcessor` maps Pinecone metadata fields to SWIRL result fields automatically.
+- Use `NO_PAYLOAD` in `result_mappings` if metadata fields should not be included in the payload.
+
+## Qdrant
+
+SWIRL supports querying Qdrant vector databases using the `QdrantDB` connector.
+
+**Example SearchProvider:**
+
+```json
+{
+    "name": "Documents - QdrantDB",
+    "connector": "QdrantDB",
+    "url": "<qdrant-url>-<collection-name>",
+    "credentials": "<your-qdrant-api-key>",
+    "query_processors": [
+        "AdaptiveQueryProcessor"
+    ],
+    "query_mappings": "",
+    "result_processors": [
+        "MappingResultProcessor",
+        "AutomaticPayloadMapperResultProcessor",
+        "CosineRelevancyResultProcessor"
+    ],
+    "response_mappings": "",
+    "result_mappings": "NO_PAYLOAD",
+    "tags": [
+        "Qdrant",
+        "VectorDB"
+    ],
+    "active": true,
+    "default": false
+}
+```
+
+**Configuration Notes:**
+
+- The `url` field uses a special format: `<qdrant-server-url>-<collection-name>`. For example: `http://localhost:6333-my_collection`.
+- Set `credentials` to your Qdrant API key. Leave empty if authentication is not required.
+- The connector uses the Qdrant Python client (`qdrant-client` package).
+
+## Oracle Database
+
+SWIRL supports querying Oracle databases using the `Oracle` connector, which extends the DBConnector base class.
+
+**Example SearchProvider:**
+
+```json
+{
+    "name": "Oracle Database",
+    "connector": "Oracle",
+    "url": "<oracle-dsn>",
+    "credentials": "<username>:<password>",
+    "query_template": "{0}",
+    "query_processors": [
+        "AdaptiveQueryProcessor"
+    ],
+    "result_processors": [
+        "MappingResultProcessor",
+        "CosineRelevancyResultProcessor"
+    ],
+    "tags": [
+        "Oracle",
+        "Database"
+    ],
+    "active": true,
+    "default": false
+}
+```
+
+**Configuration Notes:**
+
+- Set `url` to the Oracle DSN (Data Source Name), e.g., `localhost:1521/ORCL`.
+- Set `credentials` in `username:password` format.
+- Requires the `oracledb` Python package (`pip install oracledb`).
+- The connector uses `oracledb.connect()` with thin mode by default.
+- SQL queries are constructed from the `query_template` and passed to the database.
+
+## Box
+
+SWIRL supports searching Box content using the `Box` connector via the Box API.
+
+**Example SearchProvider:**
+
+```json
+{
+    "name": "Box Files",
+    "connector": "Box",
+    "url": "https://api.box.com/2.0/search",
+    "query_template": "{0}",
+    "query_processors": [
+        "AdaptiveQueryProcessor"
+    ],
+    "result_processors": [
+        "MappingResultProcessor",
+        "CosineRelevancyResultProcessor"
+    ],
+    "tags": [
+        "Box",
+        "Files"
+    ],
+    "active": true,
+    "default": false
+}
+```
+
+**Configuration Notes:**
+
+- Box integration requires OAuth2 authentication. Configure a Box Authenticator in the Admin Console.
+- The connector uses the Box Search API to find content across files, folders, and comments.
+- For Enterprise Edition, configure the Box authenticator at `http://localhost:8000/admin/swirl/authenticator/`.
+
 # Rate Limiting or Throttling of SWIRL by Sources
 
 Please note: SWIRL queries may be subject to rate limits or throttling imposed by the sources being queried. Consult the terms for the service in question for details. 
 
 SWIRL honors 429 responses to HTTP requests (including MS Graph API) and automatically back-off for a configurable time period, or the time reported. 
 
-SWIRL may be configured to limit the rate sent to any given SearchProvider. [Contact support](#support) for assistance. 
+SWIRL may be configured to limit the rate sent to any given SearchProvider. [contact support](mailto:hello@swirlaiconnect.com) for assistance. 
 

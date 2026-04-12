@@ -14,9 +14,6 @@ nav_order: 4
 
 <span class="big-text">User Guide</span><br/><span class="med-text">Community Edition</span>
 
-{: .highlight }
-Please note: we've renamed our products! **SWIRL AI Connect** is now **SWIRL AI Search** 🔎 and **SWIRL AI Co-Pilot** is now **SWIRL AI Search Assistant** 🤖
-
 ---
 
 # Running a Search  
@@ -62,7 +59,7 @@ By default, **SWIRL Community sorts results by relevancy score**. To change this
 - Click the **`View By`** dropdown.  
 - Select:  
   - **`Date`** – Sorts results chronologically. Results without a `date_published` value are hidden.  
-  - **`Top Picks`** – Highlights the most relevant results from each source.  
+  - **`Top Picks`** – Highlights the most relevant results from each source, organized by SearchProvider.  
 
 To see all results again, switch back to **`Relevancy`** sorting.  
 

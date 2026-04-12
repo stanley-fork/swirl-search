@@ -17,9 +17,6 @@ nav_order: 10
 {: .warning }
 Please [contact SWIRL](mailto:hello@swirlaiconnect.com) for access to SWIRL Enterprise.
 
-{: .highlight }
-Please note: we've renamed our products! **SWIRL AI Connect** is now **SWIRL AI Search** 🔎 and **SWIRL AI Co-Pilot** is now **SWIRL AI Search Assistant** 🤖
-
 ---
 
 # Configuring SWIRL AI Search, Enterprise Edition
@@ -32,11 +29,11 @@ Add the license provided by SWIRL to the installation’s `.env` file in the fol
 SWIRL_LICENSE={"owner": "<owner-name>", "expiration": "<expiration-date>", "key": "<public-key>"}
 ```
 
-If the license is invalid, a message will appear in `logs/django.log`. Please [contact support](#support) for assistance.
+If the license is invalid, a message will appear in `logs/django.log`. Please [contact support](mailto:hello@swirlaiconnect.com) for assistance.
 
 ## Database 
 
-For Proof of Value (POV) testing, SWIRL AI Search, Enterprise Edition can use SQLite3.  [Contact support](#support) for assistance with this configuration.
+For Proof of Value (POV) testing, SWIRL AI Search, Enterprise Edition can use SQLite3.  [Contact support](mailto:hello@swirlaiconnect.com) for assistance with this configuration.
 
 For production environments, SWIRL recommends **PostgreSQL**.
 
@@ -103,7 +100,25 @@ Click the "SAVE" button at the bottom of the page to commit changes.
 | `should_expire` | Boolean; determines if tokens need refreshing (default: `True`) |
 | `use_basic_auth` | Boolean; enables basic authentication instead of SSO |
 
-For authentication with **Elastic, OpenSearch, CAS2, Salesforce, ServiceNow, Okta, Auth0, Ping Federate**, and other systems, please [contact support](#support).  
+For authentication with **Elastic, OpenSearch, CAS2, Salesforce, ServiceNow, Okta, Auth0, Ping Federate**, and other systems, please [contact support](mailto:hello@swirlaiconnect.com).  
+
+### OpenID Connect
+
+OpenID Connect (OIDC) is a standard authentication protocol that enables secure Single Sign-On (SSO) with identity providers. When you configure an OIDC-compatible authenticator in SWIRL, users can automatically authenticate through their organization's identity provider without requiring manual user account creation in SWIRL.
+
+To configure an OpenID Connect authenticator:
+
+1. Navigate to the Admin Console at [http://localhost:8000/admin/swirl](http://localhost:8000/admin/swirl)
+2. Click on **Authenticators** to view the available authenticators
+3. Either select an existing OpenID Connect authenticator to edit it, or click **Add Authenticator** to create a new one
+4. Configure the following fields with your OpenID Connect provider's information:
+   - **`auth_uri`**: Your identity provider's authorization endpoint
+   - **`token_uri`**: Your identity provider's token endpoint
+   - **`user_data_url`**: Your identity provider's user info endpoint
+   - **`client_id`** and **`client_secret`**: Credentials provided by your identity provider
+5. Click **SAVE** to apply changes
+
+When OpenID Connect is enabled and properly configured, users will see an authentication option in the SWIRL interface that allows them to log in through their organization's identity provider. Authenticated users are automatically created in SWIRL with their identity provider information, eliminating the need for manual user management.
 
 # Connecting to Generative AI (GAI) and Large Language Models (LLMs)
 
@@ -144,7 +159,7 @@ The full list of supported embeddings and LLMs are here:
 - [Full list of Supported Embeddings](https://docs.litellm.ai/docs/embedding/supported_embedding)
 - [Full list of Supported GAI/LLMs](https://docs.litellm.ai/docs/providers)
 
-For assistance with any of these or additional models, please [contact support](#support).
+For assistance with any of these or additional models, please [contact support](mailto:hello@swirlaiconnect.com).
 
 ## Editing AI Providers
 
@@ -686,7 +701,7 @@ To install this transformer:
 
 The file should upload almost instantly, and redirect you back to the homepage. 
 
-Please, [contact support](#support) if you receive an error message. 
+Please, [contact support](mailto:hello@swirlaiconnect.com) if you receive an error message. 
 
 # Extracting Enterprise Content with Apache Tika
 
@@ -798,3 +813,57 @@ When a text chunk is excluded due to summarization truncation, logs will show en
 ```
 
 This configuration ensures that **only the most relevant content** is included in RAG, improving accuracy and efficiency.
+
+# PII Detection and Removal
+
+SWIRL Enterprise supports automatic PII (Personally Identifiable Information) detection and removal using **Microsoft Presidio**. When enabled, PII entities are detected in search results and redacted before being returned to the user.
+
+**Supported Entity Types:**
+
+Presidio detects a wide range of PII entities including names, email addresses, phone numbers, credit card numbers, social security numbers, and more.
+
+**Configuration:**
+
+1. Install the Presidio dependencies:
+   ```shell
+   pip install -r requirements-presidio.txt
+   ```
+
+2. Add `RemovePIIResultProcessor` to the `result_processors` list in the relevant SearchProvider configuration.
+
+3. Restart SWIRL for changes to take effect.
+
+{: .warning }
+PII detection adds processing overhead. Test performance impact before enabling in production on high-volume SearchProviders.
+
+# Multi-Language Support
+
+SWIRL supports multiple languages for query processing and relevancy ranking through configurable spaCy models.
+
+**Configured Languages:**
+
+| Language | spaCy Model | Setting |
+|----------|------------|---------|
+| English | `en_core_web_lg` | `SWIRL_SPACY_MODEL_EN` |
+| German | `de_core_news_lg` | `SWIRL_SPACY_MODEL_DE` |
+| Japanese | `ja_core_news_lg` | `SWIRL_SPACY_MODEL_JA` |
+| PII Detection | `en_core_web_sm` | `SWIRL_SPACY_MODEL_PII` |
+
+**Related Settings:**
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `SWIRL_DEFAULT_LANGUAGE` | `en` | Default language code |
+| `SWIRL_DEFAULT_QUERY_LANGUAGE` | `english` | Stopword dictionary language |
+| `SWIRL_PROMPT_LANGUAGE` | `en` | Language for AI prompt templates |
+
+**Adding a New Language:**
+
+1. Install the appropriate spaCy model: `python -m spacy download <model-name>`
+2. Add a `SWIRL_SPACY_MODEL_<LANG>` setting in `settings.py` or `.env`
+3. Restart SWIRL
+
+**Performance Optimization:**
+
+- `SWIRL_SPACY_VECTORS_FP16` (default: `True`) — Uses half-precision vectors to reduce memory usage
+- `SWIRL_SPACY_USE_EMBEDDINGS_CACHE` (default: `True`, max size: 2000) — Caches computed embeddings for repeated terms

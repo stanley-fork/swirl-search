@@ -68,7 +68,7 @@ Deploy SWIRL quickly and privately, anywhere Docker runs!
 4. Enter a search term and press `Search`. The ranked results should appear:  
     ![SWIRL Results No M365](images/swirl_40_results.png)
 
-    If no results appear or an error occurs, please [contact support](Quick-Start-Enterprise-1.md#support).
+    If no results appear or an error occurs, please [contact support](mailto:hello@swirlaiconnect.com).
 
 ## Enabling AI Features
 
@@ -106,7 +106,7 @@ To use **Generate AI Insights** (RAG) or **AI Search Assistant**, at least one A
    [http://localhost:8000/galaxy/chat](http://localhost:8000/galaxy/chat)
 
 8. Ask a question, such as:  
-   *“Tell me about SWIRL AI Connect?”*
+   *”Tell me about SWIRL AI Search?”*
 
     ![SWIRL Assistant Conversation with RAG Result](images/swirl_40_enterprise_assistant_rag.png)
 
@@ -134,7 +134,7 @@ To connect SWIRL with **Microsoft 365**, you need:
 
 Setup takes ~1 hour. Follow the guide: [Microsoft 365 Integration Guide](M365-Guide)
 
-For additional support, please [contact SWIRL](Quick-Start-Enterprise-1.md#support).
+For additional support, please [contact support](mailto:hello@swirlaiconnect.com).
 
 ## Google Workspace Integration
 
@@ -146,7 +146,7 @@ To connect SWIRL with **Google Workspace**, you need:
 
 Setup takes ~1 hour. Follow the guide: [Google Workspace Integration Guide](GoogleWorkspace-Guide.html)
 
-For additional support, please [contact SWIRL](Quick-Start-Enterprise-1.md#support).
+For additional support, please [contact support](mailto:hello@swirlaiconnect.com).
 
 ## Migrating from SWIRL Community
 
@@ -154,7 +154,7 @@ For additional support, please [contact SWIRL](Quick-Start-Enterprise-1.md#suppo
 
 Before migrating, consider [deleting the preloaded SearchProviders](SP-Guide.html#editing-a-searchprovider) in the SWIRL Enterprise installation. 
 
-1. Locate the `migrate_sp.py` script. As of SWIRL 4.4, this is located in the `DevUtils` folder. If you are running an earlier version please [request it from support](#support)
+1. Locate the `migrate_sp.py` script. As of SWIRL 4.4, this is located in the `DevUtils` folder. If you are running an earlier version please [request it from support](mailto:hello@swirlaiconnect.com)
 
 2. Go to the `swirl/SearchProviders` endpoint on the SWIRL server. Copy the entire JSON list to the clipboard, then paste this into a text file. Save the text file - for example, to `mySPs.json`
 
@@ -165,7 +165,7 @@ Before migrating, consider [deleting the preloaded SearchProviders](SP-Guide.htm
 
 5. The page should refresh and show you the new SearchProviders. (If there were already SearchProviders loaded, the new ones will be later in the list.)
 
-Note any errors, and feel free to [contact support](#support) for assistance.
+Note any errors, and feel free to [contact support](mailto:hello@swirlaiconnect.com) for assistance.
 
 ### Migrating OpenAI/Azure OpenAI settings
 

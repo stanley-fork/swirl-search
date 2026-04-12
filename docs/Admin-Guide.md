@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Admin Guide
-nav_order: 15
+nav_order: 18
 ---
 <details markdown="block">
   <summary>
@@ -191,14 +191,14 @@ The SWIRL application is designed to be deployed **behind a reverse-proxy** for 
 - [Azure Application Gateway](https://azure.microsoft.com/en-us/products/application-gateway)  
 - [AWS Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/)  
 
-For deployment assistance, please [contact support](#support).  
+For deployment assistance, please [contact support](mailto:hello@swirlaiconnect.com).  
 
 # Upgrading SWIRL
 
 ## Local Installations
 
 {: .warning }
-For **Docker upgrades**, please [contact support](#support) for instructions!
+For **Docker upgrades**, please [contact support](mailto:hello@swirlaiconnect.com) for instructions!
 
 1. **Update the `swirl-search` repository**:  
    ```shell
@@ -288,14 +288,15 @@ SWIRL configuration is managed in: [`swirl_server/settings.py`](https://github.c
 |-------------------|-------------|---------|
 | **CELERY_BEATS_SCHEDULE** | Defines the schedule for the [Search Expiration Service](#search-expiration-service) and [Search Subscriber Service](#search-subscriber-service) | See linked sections |
 | **SWIRL_DEFAULT_QUERY_LANGUAGE** | Determines the stopword dictionary | `SWIRL_DEFAULT_QUERY_LANGUAGE = 'english'` |
-| **SWIRL_TIMEOUT** | Time (in seconds) before terminating slow connectors | `SWIRL_TIMEOUT = 10` |
+| **SWIRL_SEARCH_HTTP_CONNECT_TIMEOUT** | Time (in seconds) to wait for initial connection to a SearchProvider | `SWIRL_SEARCH_HTTP_CONNECT_TIMEOUT = 3` |
+| **SWIRL_SEARCH_HTTP_READ_TIMEOUT** | Time (in seconds) to wait for a SearchProvider to return results | `SWIRL_SEARCH_HTTP_READ_TIMEOUT = 10` |
 | **SWIRL_SUBSCRIBE_WAIT** | Timeout for updating a search | `SWIRL_SUBSCRIBE_WAIT = 20` |
 | **SWIRL_DEDUPE_FIELD** | Field used for [duplicate detection](./Developer-Guide#detect-and-remove-duplicate-results) | `SWIRL_DEDUPE_FIELD = 'url'` |
 | **SWIRL_DEDUPE_SIMILARITY_MINIMUM** | Minimum similarity score to classify as duplicate | `SWIRL_DEDUPE_SIMILARITY_MINIMUM = 0.95` |
 | **SWIRL_DEDUPE_SIMILARITY_FIELDS** | Fields used for duplicate detection | `SWIRL_DEDUPE_SIMILARITY_FIELDS = ['title', 'body']` |
 | **SWIRL_RELEVANCY_CONFIG** | Defines relevancy score weights for key fields | See below |
 | **SWIRL_MAX_MATCHES** | Maximum matches per result (limits long articles) | `SWIRL_MAX_MATCHES = 5` |
-| **SWIRL_MIN_SIMILARITY** | Minimum score required for query hits to be scored | `SWIRL_MIN_SIMILARITY = 0.54` |
+| **SWIRL_MIN_SIMILARITY** | Minimum score required for query hits to be scored | `SWIRL_MIN_SIMILARITY = 0.01` |
 | **SWIRL_EXPLAIN** | Enables relevancy explain structures in responses | `SWIRL_EXPLAIN = false` |
 
 **Example `SWIRL_RELEVANCY_CONFIG`**
@@ -347,7 +348,7 @@ CELERY_BEAT_SCHEDULE = {
   ![Django console crontab page](images/django_admin_console_crontab.png)
 
 {: .warning }
-**Enterprise Edition** supports a **5-minute expiration schedule**. Please [contact support](#support) for details.
+**Enterprise Edition** supports a **5-minute expiration schedule**. Please [contact support](mailto:hello@swirlaiconnect.com) for details.
 
 {: .warning }
 If you modify `crontab` in the **database** without updating **`CELERY_BEAT_SCHEDULE`**, the **original schedule will be restored** when SWIRL restarts.
@@ -405,12 +406,12 @@ python swirl.py status
 
 Example output:
 ```shell
-INFO 2025-03-01 19:59:55 settings Swirl Enterprise 4.1-DEV licensed to: SWIRL_Corporation
+INFO 2025-03-01 19:59:55 settings Swirl Enterprise 4.5-DEV licensed to: SWIRL_Corporation
 
          .   o
         .        .   .  o  
         .      .                                    
-  o        .  @ @   .            SWIRL AI ENTERPRISE 4.1-DEV
+  o        .  @ @   .            SWIRL AI ENTERPRISE 4.5-DEV
     .        @ @  .    .         Licensed to: SWIRL_Corporation
       .  . .   .     .    .
             .       .     o
@@ -418,14 +419,15 @@ INFO 2025-03-01 19:59:55 settings Swirl Enterprise 4.1-DEV licensed to: SWIRL_Co
 
 
 Service: django...RUNNING, pid:34738
-Service: celery-worker...RUNNING, pid:34767
-
-  PID TTY           TIME CMD
-34738 ttys005    0:56.97 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Library/Frameworks/Python.framework/Versions/3.12/bin/daphne -b 0.0.0.0 -p 8000 swirl_server.asgi:application
-34767 ttys005    2:10.94 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Library/Frameworks/Python.framework/Versions/3.12/bin/celery -A swirl_server worker -Q default --without-heartbeat --without-gossip --without-mingle --loglevel=info --concurrency=15
-
-Command successful!
+Service: celery-search-worker...RUNNING, pid:34767
+Service: celery-pagefetch-worker...RUNNING, pid:34780
+Service: celery-interactive-worker...RUNNING, pid:34793
+Service: celery-maintenance-worker...RUNNING, pid:34806
+Service: celery-healthcheck-worker...RUNNING, pid:34819
 ```
+
+{: .highlight }
+**Enterprise Edition** runs five specialized Celery workers, each handling a different type of task: `celery-search-worker` (query federation), `celery-pagefetch-worker` (full-page content fetching for RAG), `celery-interactive-worker` (real-time chat and interactive queries), `celery-maintenance-worker` (expiration, subscription, and housekeeping tasks), and `celery-healthcheck-worker` (service health monitoring). **Community Edition** runs a single `celery-worker` that handles all task types.
 
 **Stopping Services**
 
@@ -449,6 +451,29 @@ python swirl.py restart celery-worker consumer
 ```shell
 python swirl.py help
 ```
+
+## Complete Command Reference
+
+| Command | Description |
+|---------|-------------|
+| `start` | Start all SWIRL services |
+| `stop` | Stop all SWIRL services |
+| `restart` | Restart all SWIRL services |
+| `status` | Show status of all services |
+| `logs` | Tail logs from all services |
+| `setup` | Initialize SWIRL (create database, load fixtures) |
+| `migrate` | Run Django database migrations |
+| `debug` | Start SWIRL in debug mode (foreground, verbose logging) |
+| `watch` | Start SWIRL and watch log output |
+| `load_branding` | Load or reload branding configuration |
+| `load_data` | Load fixture data into the database |
+| `load_fixtures` | Load fixture files |
+| `reload_ai_prompts` | Reload AI prompt templates to factory defaults |
+| `config_postgres` | Configure PostgreSQL as the database backend |
+| `config_db` | General database configuration |
+| `config_default_api_settings` | Configure default API settings |
+| `galaxy` | Open the Galaxy UI in the default browser |
+| `help` | Display help information |
 
 ## Customizing
 
@@ -694,7 +719,7 @@ DATABASES = {
 ```
 
 {: .warning }
-The following sections apply **only** to SWIRL Community Edition. For Enterprise Edition instructions view the [AI Connect Guide](AI-Search#postgresql-configuration).
+The following sections apply **only** to SWIRL Community Edition. For Enterprise Edition instructions view the [AI Search Guide](AI-Search#postgresql-configuration).
 
 ## Configuring PostgreSQL as the Database Backend
 

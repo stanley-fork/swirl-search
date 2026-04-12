@@ -14,9 +14,6 @@ nav_order: 5
 
 <span class="big-text">Retrieval Augmented Generation (RAG) Configuration</span><br/><span class="med-text">Community Edition</span>
 
-{: .highlight }
-Please note: we've renamed our products! **SWIRL AI Connect** is now **SWIRL AI Search** 🔎 and **SWIRL AI Co-Pilot** is now **SWIRL AI Search Assistant** 🤖
-
 ---
 
 SWIRL supports Real-Time **Retrieval Augmented Generation (RAG)** out of the box, using result snippets and/or the full text of fetched result pages.  
@@ -50,8 +47,8 @@ SWIRL supports Real-Time **Retrieval Augmented Generation (RAG)** out of the box
     SWIRL_REWRITE_MODEL='gpt-4.1'
     SWIRL_QUERY_MODEL='gpt-4.1'
 
-    # RAG token and results budgets (defaults are 4000 and 10, respectively)
-    SWIRL_RAG_TOK_MAX=25000
+    # RAG token and results budgets (defaults are 3000 and 10, respectively)
+    SWIRL_RAG_TOK=25000
     SWIRL_RAG_MAX_TO_CONSIDER=12
     ```
 
@@ -94,7 +91,7 @@ SWIRL supports Real-Time **Retrieval Augmented Generation (RAG)** out of the box
     - Ensure the **"Generate AI Response"** switch is **off**.  
     - Search for:  
       ```shell
-      http://localhost:8000/galaxy/?q=SWIRL+AI+Connect
+      http://localhost:8000/galaxy/?q=SWIRL+AI+Search
       ```  
 
     Results appear:  

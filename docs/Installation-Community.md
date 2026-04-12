@@ -27,7 +27,7 @@ Refer to [Install Redis](https://redis.io/docs/latest/operate/oss_and_stack/inst
   - Microsoft Windows is **not supported** due to Celery dependencies  
 - **Hardware:** 8+ VCPU, 16+ GB RAM  
 - **Storage:** 500+ GB free disk space  
-- **Python:** 3.11 or newer  
+- **Python:** 3.12 or newer (3.13 is the tested version)  
 
 ## macOS
 

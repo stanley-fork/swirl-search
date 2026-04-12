@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Developer Guide
-nav_order: 23
+nav_order: 26
 ---
 <details markdown="block">
   <summary>
@@ -15,6 +15,17 @@ nav_order: 23
 <span class="big-text">Developer Guide</span><br/><span class="med-text">Community Edition | Enterprise Edition</span>
 
 ---
+
+# Key Concepts
+
+Before diving into SWIRL's architecture, here are the core components referenced throughout this guide:
+
+- **SearchProvider** — A JSON configuration that defines a searchable data source, including its connector type, URL, credentials, and field mappings.
+- **Connector** — A Python module that handles communication with a specific type of data source (e.g., REST API, database, vector store).
+- **Processor** — A Python module that transforms queries (QueryProcessor) or results (ResultProcessor) at various stages of the search pipeline.
+- **Mixer** — A module that combines and re-ranks results from multiple SearchProviders into a unified result set.
+- **Query Transform** — A reusable rule that modifies search queries, such as expanding synonyms or rewriting terms.
+- **Reader LLM** — A non-generative language model (typically spaCy) used for computing relevancy embeddings and re-ranking results, distinct from the generative LLM used for RAG.
 
 # Architecture
 
@@ -83,6 +94,254 @@ nav_order: 23
     - **Merging and de-duplication** ensure no duplicate results.
 
 To retrieve only new results, use `Search.new_results_url` or select a **NewItem Mixer**.
+
+# API Examples
+
+All SWIRL API endpoints require authentication. The examples below use token-based authentication. To obtain a token, log in first:
+
+## Authentication
+
+**curl:**
+
+```shell
+# Get a session cookie by logging in
+curl -c cookies.txt -X POST http://localhost:8000/swirl/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "password"}'
+```
+
+**Python:**
+
+```python
+import requests
+
+BASE_URL = "http://localhost:8000"
+session = requests.Session()
+
+# Log in and store the session cookie
+response = session.post(f"{BASE_URL}/swirl/login/", json={
+    "username": "admin",
+    "password": "password"
+})
+# The session object now carries the authentication cookie for subsequent requests
+```
+
+## Running a Search
+
+**curl — asynchronous (returns search ID immediately):**
+
+```shell
+# Create a search and get the search ID
+curl -b cookies.txt -X POST http://localhost:8000/swirl/search/ \
+  -H "Content-Type: application/json" \
+  -d '{"query_string": "artificial intelligence"}'
+
+# Poll for results (replace 1 with your search ID)
+curl -b cookies.txt http://localhost:8000/swirl/results/?search_id=1
+```
+
+**curl — synchronous (waits for results):**
+
+```shell
+# Run a search and get results in one call
+curl -b cookies.txt "http://localhost:8000/swirl/search/?qs=artificial+intelligence"
+```
+
+**Python — synchronous search:**
+
+```python
+# Synchronous search — returns results directly
+response = session.get(f"{BASE_URL}/swirl/search/", params={
+    "qs": "artificial intelligence"
+})
+results = response.json()
+
+# Access the mixed results
+for result in results.get("results", []):
+    print(f"{result['swirl_rank']}. {result['title']}")
+    print(f"   Score: {result.get('swirl_score', 'N/A')}")
+    print(f"   Source: {result['searchprovider']}")
+    print(f"   URL: {result['url']}")
+    print()
+```
+
+**Python — asynchronous search with polling:**
+
+```python
+import time
+
+# Create the search
+response = session.post(f"{BASE_URL}/swirl/search/", json={
+    "query_string": "artificial intelligence",
+    "results_requested": 20
+})
+search = response.json()
+search_id = search["id"]
+print(f"Search created: ID {search_id}, status: {search['status']}")
+
+# Poll until results are ready
+while True:
+    response = session.get(f"{BASE_URL}/swirl/search/{search_id}/")
+    search = response.json()
+    if search["status"] in ("FULL_RESULTS_READY", "PARTIAL_RESULTS_READY"):
+        break
+    time.sleep(0.5)
+
+# Retrieve mixed results
+response = session.get(f"{BASE_URL}/swirl/results/", params={
+    "search_id": search_id,
+    "result_mixer": "RelevancyMixer"
+})
+results = response.json()
+print(f"Got {len(results.get('results', []))} results")
+```
+
+## Targeting Specific SearchProviders
+
+**curl:**
+
+```shell
+# Search only specific providers by name
+curl -b cookies.txt -X POST http://localhost:8000/swirl/search/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query_string": "machine learning",
+    "searchprovider_list": ["Arxiv.org", "European PMC"]
+  }'
+```
+
+**Python:**
+
+```python
+response = session.post(f"{BASE_URL}/swirl/search/", json={
+    "query_string": "machine learning",
+    "searchprovider_list": ["Arxiv.org", "European PMC"]
+})
+```
+
+## Search with RAG
+
+**curl — synchronous RAG search:**
+
+```shell
+# Run a search with RAG in one call
+curl -b cookies.txt "http://localhost:8000/swirl/search/?qs=what+is+retrieval+augmented+generation&rag=true"
+```
+
+**curl — RAG with timeout override:**
+
+```shell
+curl -b cookies.txt "http://localhost:8000/swirl/search/?qs=summarize+recent+AI+advances&rag=true&rag_timeout=120"
+```
+
+**Python — RAG search:**
+
+```python
+# Synchronous RAG search
+response = session.get(f"{BASE_URL}/swirl/search/", params={
+    "qs": "what is retrieval augmented generation",
+    "rag": "true"
+})
+rag_results = response.json()
+
+# The RAG response includes the AI-generated insight
+info = rag_results.get("info", {})
+search_info = info.get("search", {})
+print("AI Insight:", search_info.get("rag_response", "No RAG response"))
+
+# Citations are included in the results
+for result in rag_results.get("results", []):
+    print(f"  - {result['title']} ({result['url']})")
+```
+
+## Enterprise RAG Search API
+
+For Enterprise Edition, the dedicated RAG search endpoint provides additional control:
+
+**curl:**
+
+```shell
+curl -b cookies.txt -X POST http://localhost:8000/swirl/rag-search/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query_string": "summarize key findings on climate change",
+    "searchprovider_list": ["Google News", "Arxiv.org"]
+  }'
+```
+
+**Python:**
+
+```python
+response = session.post(f"{BASE_URL}/swirl/rag-search/", json={
+    "query_string": "summarize key findings on climate change",
+    "searchprovider_list": ["Google News", "Arxiv.org"]
+})
+rag_result = response.json()
+```
+
+## Retrieving Results with Different Mixers
+
+**curl:**
+
+```shell
+# Default relevancy-ranked results
+curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1"
+
+# Date-sorted results
+curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1&result_mixer=DateMixer"
+
+# Round-robin across sources
+curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1&result_mixer=Stack2Mixer"
+
+# Paginate results (10 per page)
+curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1&page=2"
+```
+
+**Python:**
+
+```python
+# Get results with a specific mixer
+response = session.get(f"{BASE_URL}/swirl/results/", params={
+    "search_id": search_id,
+    "result_mixer": "DateMixer"
+})
+date_sorted = response.json()
+
+# Paginate through results
+page = 1
+while True:
+    response = session.get(f"{BASE_URL}/swirl/results/", params={
+        "search_id": search_id,
+        "page": page
+    })
+    data = response.json()
+    results = data.get("results", [])
+    if not results:
+        break
+    for r in results:
+        print(f"  {r['swirl_rank']}. {r['title']}")
+    page += 1
+```
+
+## Listing SearchProviders
+
+**curl:**
+
+```shell
+# List all active SearchProviders
+curl -b cookies.txt http://localhost:8000/swirl/searchproviders/
+```
+
+**Python:**
+
+```python
+response = session.get(f"{BASE_URL}/swirl/searchproviders/")
+providers = response.json()
+for sp in providers:
+    status = "active" if sp["active"] else "inactive"
+    default = " (default)" if sp["default"] else ""
+    print(f"  [{sp['id']}] {sp['name']} - {sp['connector']} - {status}{default}")
+```
 
 # How To...
 
@@ -153,7 +412,7 @@ The `qs=` parameter functions like `q=`, except that it **immediately returns th
 
 **`qs=` Supports:**
 - **Filtering by SearchProviders** using [`providers=`](#specify-searchproviders-with-providers-url-parameter).
-- **Using custom Mixers** via [`result_mixer=`](./Developer-Reference#mixers-1).
+- **Using custom Mixers** via [`result_mixer=`](./Developer-Reference#mixers).
 - **Enabling RAG processing** in a single call:  
   `?qs=metasearch&rag=true`
 
@@ -276,7 +535,7 @@ The `messages` field logs **federation processing details**, while individual Re
 
 **Viewing Only New Results**
 
-Use the **[NewItems Mixers](./Developer-Reference#mixers-1)** to retrieve **only newly added results**.
+Use the **[NewItems Mixers](./Developer-Reference#mixers)** to retrieve **only newly added results**.
 
 ## Detect and Remove Duplicate Results
 
@@ -335,7 +594,7 @@ http://localhost:8000/swirl/search/?update=<search-id>
 - **De-duplicates** results using the `url` field.
 - **Updates Search and Result messages** as the process runs.
 
-Use **[`RelevancyNewItemsMixer` and `DateNewItemsMixer`](./Developer-Reference#mixers-1)** to retrieve **only new results**.
+Use **[`RelevancyNewItemsMixer` and `DateNewItemsMixer`](./Developer-Reference#mixers)** to retrieve **only new results**.
 
 ## Improve Relevancy for a Single SearchProvider
 

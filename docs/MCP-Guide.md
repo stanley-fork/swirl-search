@@ -1,7 +1,7 @@
 ---
 layout: default
 title: MCP Server
-nav_order: 20
+nav_order: 16
 ---
 <details markdown="block">
   <summary>
@@ -19,7 +19,10 @@ nav_order: 20
 This guide explains how to install the SWIRL MCP (Model Context Protocol) proxy server & CLI client and optionally use it with [Crew.AI](https://crew.ai).
 
 {: .warning }
-**This guide is still being reviewed**. [Contact support](#support) for additional assistance.
+**This guide is still being reviewed**. [Contact support](mailto:hello@swirlaiconnect.com) for additional assistance.
+
+{: .highlight }
+**Enterprise Edition** includes built-in MCP support with tools for `SWIRL_get_sources`, `SWIRL_search_and_rag`, `SWIRL_search`, and `SWIRL_read_document`. The standalone MCP proxy described below is for **Community Edition** or for connecting external MCP clients to SWIRL.
 
 # Overview
 
