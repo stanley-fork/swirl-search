@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Contributions
-nav_order: 26
+nav_order: 29
 ---
 <details markdown="block">
   <summary>
@@ -42,7 +42,7 @@ These tasks generally take **1-2 weeks** for an intermediate to advanced develop
 
 # Testing & Documentation
 
-SWIRL has an extensive automated testing system and detailed documentation. Contributions in these areas range from **small updates to major improvements**. Please [contact us](#support) for details.
+SWIRL has an extensive automated testing system and detailed documentation. Contributions in these areas range from **small updates to major improvements**. Please [contact us](mailto:hello@swirlaiconnect.com) for details.
 
 # Guidelines for Submissions
 

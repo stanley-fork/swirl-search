@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Google Workspace Guide
-nav_order: 18
+nav_order: 21
 ---
 <details markdown="block">
   <summary>
@@ -21,6 +21,9 @@ This guide explains how to integrate SWIRL with an existing **Google Workspace (
 Administrators may also need to **grant API permissions** so users can **query their personal GW content** through SWIRL.
 
 # Register a New App in GW Portal
+
+{: .warning }
+**Prerequisites:** You must have **administrator access** to your organization's Google Workspace admin console to enable APIs and create OAuth credentials. If you do not have admin access, contact your IT administrator.
 
 To connect **SWIRL** to an **GW tenant**, first, **register and configure a new App** in the **GW Portal**.
 

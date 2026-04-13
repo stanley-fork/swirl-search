@@ -24,7 +24,7 @@ nav_order: 14
 | **Connector** | A SWIRL module that interacts with a **specific data source**, wrapping existing Python libraries (e.g., `requests.get`, `elasticsearch`). |
 | [**Confidence**](User-Guide-Enterprise#confidence-scores) | A **prediction of relevancy** for a SWIRL search result, ranging from **0 to 1**. *(Enterprise Edition only)* |
 | **Message** | A SWIRL object containing a **message** sent **to or from** a GAI/LLM. *(Enterprise Edition only)* |
-| [**Mixer**](Developer-Reference#mixers-1) | Combines results from multiple **SearchProviders** into a **unified result set**, applying **relevancy ranking**. |
+| [**Mixer**](Developer-Reference#mixers) | Combines results from multiple **SearchProviders** into a **unified result set**, applying **relevancy ranking**. |
 | **Page Fetcher** | A SWIRL module that **retrieves a copy** of a specific document for additional processing. The *Enterprise Edition* can authenticate when fetching |  
 | **Processors** | Modules that process **search queries and results**, transforming them (e.g., **removing control characters, spell-checking, or normalizing formats**). |
 | [**Prompt**](User-Guide-Enterprise#customizing-prompts) | A SWIRL object that configures a **GAI or LLM** for use in **AI-assisted search roles**, such as **Retrieval-Augmented Generation (RAG) or chat**. *(Enterprise Edition only)* |

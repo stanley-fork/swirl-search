@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Microsoft 365 Guide
-nav_order: 17
+nav_order: 20
 ---
 <details markdown="block">
   <summary>
@@ -21,6 +21,9 @@ This guide explains how to integrate SWIRL with an existing **Microsoft 365 (M36
 Administrators may also need to **grant API permissions** so users can **query their personal M365 content** through SWIRL.
 
 # Register a New App in Azure Portal
+
+{: .warning }
+**Prerequisites:** You must have **administrator access** to your organization's Azure Active Directory / Entra ID tenant to complete the app registration steps below. If you do not have admin access, contact your IT administrator.
 
 To connect **SWIRL** to an **M365 tenant**, first **register and configure a new App** in the **Azure Portal**.
 
@@ -501,7 +504,7 @@ To verify that **SWIRL-M365 integration** is working:
    ![SWIRL Assistant discussion](images/swirl_40_search_msft.png)
 
 {: .warning }
-If the **Microsoft toggle does not activate** after authentication, please [contact support](#support). The [Related Documentation](#related-documentation) below may also be helpful.
+If the **Microsoft toggle does not activate** after authentication, please [contact support](mailto:hello@swirlaiconnect.com). The [Related Documentation](#related-documentation) below may also be helpful.
 
 # Related Documentation
 

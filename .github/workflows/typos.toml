@@ -16,3 +16,5 @@ fo = "fo"
 [default.extend-words]
 # Don't correct the initialism "SME"
 sme = "sme"
+# Don't correct "AKS" (Azure Kubernetes Service)
+aks = "aks"

@@ -14,9 +14,6 @@ nav_order: 3
 
 <span class="big-text">Quick Start Guide</span><br/><span class="med-text">Community Edition</span>
 
-{: .highlight }
-Please note: we've renamed our products! **SWIRL AI Connect** is now **SWIRL AI Search** 🔎 and **SWIRL AI Co-Pilot** is now **SWIRL AI Search Assistant** 🤖
-
 ---
 
 ## 1. Prerequisites  
@@ -158,9 +155,9 @@ The **Docker version** of SWIRL AI Search Community Edition does *not* retain an
 {: .highlight }  
 **Pre-configured SearchProviders**
 SWIRL includes **active SearchProviders** for:  
-✅ **Arxiv.org**  
-✅ **European PMC**  
-✅ **Google News**  
+✅ **Arxiv.org** (default — included in all searches)  
+✅ **European PMC** (active but not default — use the `tag:` syntax or add to `searchprovider_list` to include)  
+✅ **Google News** (default — included in all searches)  
 These work **out of the box** as long as internet access is available.  
 
 {: .highlight } 

@@ -87,3 +87,33 @@ For **detailed logging**, enable **Debug mode**:
 
 - Restart SWIRL with the `--debug` flag.
 - Alternatively, update the `settings.py` file (see the Developer Guide for details).
+
+# Common Enterprise Issues
+
+## License Validation Errors
+
+If you see license validation errors in `logs/django.log`:
+
+1. Verify the `SWIRL_LICENSE` value in your `.env` file is valid JSON.
+2. Check that the license has not expired (the `expiration` field is a date in `YYYY-MM-DD` format).
+3. Ensure the `public_key.pem` file is present in the SWIRL installation directory.
+4. [Contact support](mailto:hello@swirlaiconnect.com) if the issue persists.
+
+## Celery Workers Not Starting
+
+In Enterprise Edition, SWIRL runs five specialized Celery workers. If any fail to start:
+
+1. Check `logs/celery-*.log` for error messages.
+2. Verify Redis is running and accessible at the configured `CELERY_BROKER_URL`.
+3. Check available system memory — each worker requires its own process pool.
+4. Run `python swirl.py status` to see which workers are running.
+
+## RAG Timeout or No Response
+
+If "Generate AI Insight" times out:
+
+1. Verify your AI Provider is configured and active at `/swirl/aiproviders/`.
+2. Check that the API key in the AI Provider credentials is valid.
+3. Increase `SWIRL_RAG_TIMEOUT` in `.env` if working with large document sets.
+4. Check `logs/celery-pagefetch-worker.log` for page fetching errors.
+5. Ensure the Tika service is running if processing PDF or Office documents.
