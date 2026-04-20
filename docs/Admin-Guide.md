@@ -92,34 +92,30 @@ If the new password is **too simple**, Django will reject it.
 
 For more details, see: [Django Admin and manage.py](https://docs.djangoproject.com/en/4.0/ref/django-admin/)
 
-**Using the SWIRL Admin Console**
+**Using the Django Admin**
 
-To **change the Super User password via the SWIRL Admin Console**:
+To **change the Super User password via Django Admin**:
 
-1. Go to: [http://localhost:8000/admin/](http://localhost:8000/admin/) and log in as a superuser.
-2. In the top-right corner, click the **"CHANGE PASSWORD"** link next to your username:
+1. Go to: [http://localhost:8000/swirl](http://localhost:8000/swirl)  
+2. Click **"CHANGE PASSWORD"**:
 
-   ![SWIRL Admin Console — Change Password link](images/ds-5587/admin-user-change-password-1.png)
+   ![Django Admin Change Password](images/try-it-adm-pwd-3.png)
 
-3. Enter the current password, then the new password twice:
+3. Enter a new password:
 
-   ![SWIRL Admin Console — Password change form](images/ds-5587/admin-user-change-password-2.png)
+   ![Django Admin Change Password](images/try-it-adm-pwd-4.png)
 
 4. Click **"CHANGE MY PASSWORD"**.
 
-See also [SWIRL Admin Console](#swirl-admin-console) for a tour of the console.
-
 ## Adding Normal Users
 
-Users can be managed from the [Users page](http://localhost:8000/admin/auth/user/) in the SWIRL Admin Console:
+Users can be managed via **Django Admin**:
 
 ```
-http://localhost:8000/admin/auth/user/
+http://localhost:8000/admin/
 ```
 
-  ![SWIRL Admin Console — Users list](images/ds-5587/admin-users-list.png)
-
-Click **"ADD USER"** in the top-right to create a new account, or click a username to edit an existing user (change password, groups, permissions, staff/superuser status).
+  ![Django Admin - Users](images/django_admin_console_user.png)
 
 {: .highlight }
 If using **OpenID Connect**, manual user creation is **not required**. See the [AI Search Guide](AI-Search#openid-connect) for details.
@@ -133,9 +129,7 @@ Each **SWIRL core object** (`SearchProviders`, `Search`, `Result`, `Query Transf
 - **`delete`** → Allows removal
 - **`view`** → Allows read-only access
 
-Open a user on the [Users page](http://localhost:8000/admin/auth/user/) and scroll down to the **Permissions** section. Assign permissions directly to the user via the dual-list picker, or assign them at the group level and then add the user to that group.
-
-  ![SWIRL Admin Console — User permissions](images/ds-5587/admin-user-permissions.png)
+  ![Django Admin - Permissions](images/django_admin_console_permissions.png)
 
 **Recommended Permission Configurations**
 
@@ -192,6 +186,7 @@ The SWIRL application is designed to be deployed **behind a reverse-proxy** for 
 
 **Recommended Reverse-Proxy Solutions**
 
+- [HA Proxy](https://www.haproxy.org/)  
 - [Nginx](https://nginx.org/en/)  
 - [Azure Application Gateway](https://azure.microsoft.com/en-us/products/application-gateway)  
 - [AWS Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/)  
@@ -350,7 +345,7 @@ CELERY_BEAT_SCHEDULE = {
   http://localhost:8000/admin/django_celery_beat/crontabschedule/
   ```
 
-  ![SWIRL Admin Console — Crontab Schedules](images/ds-5587/admin-crontab.png)
+  ![Django console crontab page](images/django_admin_console_crontab.png)
 
 {: .warning }
 **Enterprise Edition** supports a **5-minute expiration schedule**. Please [contact support](mailto:hello@swirlaiconnect.com) for details.
@@ -381,7 +376,7 @@ CELERY_BEAT_SCHEDULE = {
   http://localhost:8000/admin/django_celery_beat/crontabschedule/
   ```
 
-  ![SWIRL Admin Console — Crontab Schedules](images/ds-5587/admin-crontab.png)
+  ![Django console crontab page](images/django_admin_console_crontab.png)
 
 {: .warning }
 If you modify `crontab` in the **database** without updating **`CELERY_BEAT_SCHEDULE`**, the **original schedule will be restored** when SWIRL restarts.
@@ -502,13 +497,19 @@ COOKIE_CONSENT_DISPLAY=False
 
 To **customize the logo, search button, and labels** in **SWIRL Galaxy**:
 
-1. **Go to the SWIRL Admin Console**: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+1. **Go to the SWIRL Admin Page**: [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
-2. In the **Actions** card on the dashboard, click **"Upload a Branding Configuration"** to open the Branding Configuration form:
+   ![SWIRL home page](./images/admin.png)
 
-   ![SWIRL branding configuration](./images/ds-5587/branding-configuration.png)
+2. **Click the "admin" link** to open the **Admin UI**:
 
-3. **Fill out the form**:
+   ![SWIRL admin UI](./images/admin_branding.png)
+
+3. **Click "Upload a Branding Configuration"** to go to the **Branding Configuration** page:
+
+   ![SWIRL branding configuration](./images/branding_config.png)
+
+4. **Fill out the form**:
    - **"Name"** is required.
    - At least **one additional field** must be customized.
    - To change the **logo**, upload a **light mode image**.
@@ -523,8 +524,8 @@ To **customize the logo, search button, and labels** in **SWIRL Galaxy**:
 | **AI Response label** | Below search box | `"Generate AI Response"` |
 | **Select items label** | Below paging control | `"Select Items"` |
 
-4. **Click "Submit"** to save your branding changes.
-5. **Refresh your browser** to apply changes in **Galaxy UI**.
+5. **Click "Submit"** to save your branding changes.  
+6. **Refresh your browser** to apply changes in **Galaxy UI**.
 
 {: .warning }
 Refreshing may start a **new RAG or chat session**.
@@ -550,100 +551,17 @@ SWIRL displays the last updated branding configuration. To make a previous confi
 
 Reload Galaxy in the browser. The saved branding configuration will appear, replacing the previous one.
 
-# SWIRL Admin Console
+# Managing Django Users
 
-Most administrative tasks — managing users, SearchProviders, AIProviders, Authenticators, Prompts, branding, and more — happen in the SWIRL Admin Console at:
+## Django Admin
+
+Most users can be managed through **Django Admin**, accessible at:
 
 ```
 http://localhost:8000/admin/
 ```
 
-The admin opens on a single dashboard showing system status, search activity trends, recent actions, one-click access to administrative actions, and a categorized grid of every configurable object in SWIRL.
-
-![SWIRL Admin Console — dashboard](images/ds-5587/admin-home.png)
-
-Below the dashboard, administrative objects are grouped by purpose. The SWIRL app is split into **Configuration** (SearchProviders, AIProviders, Authenticators, Prompts, Query Transforms, Branding), **Runtime** (Searches, Results, Chats, Messages, AI Insight results, OAuth tokens), **Feedback** (Result and Message ratings), and **Notifications**. The remaining Django apps (users, tokens, schedules, audit, consent) appear under their own category banners.
-
-![SWIRL Admin Console — categorized object grid](images/ds-5587/admin-home-categories.png)
-
-Two links in the top-right header deserve attention:
-
-- **"Go to Galaxy ↗"** opens the Galaxy search & chat UI in the same tab, so you can quickly test admin changes against the end-user experience.
-- **"Documentation ↗"** opens [docs.swirlaiconnect.com](https://docs.swirlaiconnect.com/) in a new tab.
-
-For an introduction to the underlying Django admin framework, see this **[YouTube video on Django Administration](https://youtu.be/jCihWwrwS-w?si=QVtZXR7j9PRszQW1&t=174)**.
-
-## Activity Analytics
-
-The Activity Analytics page at [/admin/activity/](http://localhost:8000/admin/activity/) (also reachable from the **Actions** card on the dashboard) gives a single view of everything SWIRL has been doing in a chosen window of time. Preset chips (24 H / 7 D / 30 D / 90 D / YTD) at the top control the window; every chart and table on the page re-renders to match. Custom date ranges can be entered via the "From / To" inputs.
-
-![Activity Analytics — top of page](images/ds-5587/admin-activity.png)
-
-Sections include:
-
-- **Overview strip** — total searches, unique searchers, errors, and overall AI Insight Yield for the window.
-- **Trend charts** — Searches, Messages, and Errors as time-bucketed bars. The bucket size is hourly for windows of 48 hours or less and daily for longer windows.
-- **Top users** and **Top groups** — the most active accounts, with groups counted once for each user-group membership (a search by a user in two groups counts toward both).
-- **Errors** — `NotificationItem` rows grouped by service × category × level.
-- **Top SearchProviders** — the providers most frequently included in the query scope (from each `Search.searchprovider_list`).
-- **Futile queries** — queries that produced zero retrievals across every provider, or that failed outright (status prefixed `ERR_`). Most entries typically occur once.
-- **AI Insight Yield** — positive-vs-negative rating distribution, trend over time, the distinct feedback strings users entered on thumbs-down ratings, and a listing of the most recent thumbs-down ratings for direct inspection.
-
-![Activity Analytics — lower-page metrics](images/ds-5587/admin-activity-sections.png)
-
-## Agent Health
-
-Celery workers are SWIRL's asynchronous backbone — they run searches, fetch pages, generate RAG answers, and maintain subscriptions. The [Agents page](http://localhost:8000/admin/agents/) shows a health indicator and a per-queue table of depth, active tasks, worker count, capacity, and busy ratio.
-
-![Admin — Agents page](images/ds-5587/admin-agents.png)
-
-Click the **Agents** card in the dashboard status strip, or open `/admin/agents/` directly. The "Refresh" button re-runs the health ping immediately; the "Raw JSON" and "Raw Prometheus" buttons link to the machine-readable endpoints that alerting systems and Prometheus scrape.
-
-A corresponding green/red dot appears in the dashboard status strip across every admin page, so problems with the worker queues surface without needing to navigate.
-
-## Log Viewer
-
-[/admin/logs/](http://localhost:8000/admin/logs/) renders the contents of any file in the `logs/` directory inside the admin chrome, with controls for file selection, line-count (50 / 100 / 250 / 500), a filter-text highlighter, and optional 10-second auto-refresh.
-
-![Admin — Log Viewer](images/ds-5587/admin-logs.png)
-
-Reach it from the **Actions** card on the dashboard, or open the URL directly. For downloading all log files as a ZIP, see **"Download Logs"** in the same Actions card.
-
-## License Status
-
-The license status card in the dashboard status strip shows **LICENSED** (green) with the expiration date, or **UNLICENSED** if no license is configured. When the license is within 30 days of expiration — or already expired — a red banner appears at the top of every admin page:
-
-> Your SWIRL license expires in 7 days (2026-04-27). [Contact SWIRL](mailto:hello@swirlaiconnect.com) to renew. [Dismiss]
-
-Clicking **Dismiss** hides the banner for 30 days via a cookie. Admins receiving the banner should contact SWIRL promptly — license expiration disables Enterprise features.
-
-## Editing Secrets Safely
-
-Connector credentials, AI Provider API keys, Authenticator client secrets, and OAuth tokens are **never displayed in the admin**. On the change form, every secret field:
-
-- Renders as a password input with the value masked (not even a dotted preview — truly blank).
-- On edit, can be **left blank to preserve the stored value**. You only need to re-enter the secret if you are changing it.
-- Is required on add — you cannot create a new provider without giving it a secret.
-
-When using the **"Export selected as JSON"** admin action, secret fields are always redacted to empty strings in the downloaded file, so exported configuration can be safely shared for support or migration without leaking credentials.
-
-OAuth tokens (`OauthToken` model) are read-only in the admin; even listing them shows only a masked preview (`abcd1234…wxyz`), never the raw token. To mint a new token, go through the normal OAuth callback flow rather than editing the admin directly.
-
-## JSON Editor for Configuration Fields
-
-Every JSON-typed field in the admin (connector `config`, `http_request_headers`, `page_fetch_config_json`, `query_template_json`, etc.) renders with a proper JSON editor instead of a plain textarea. The editor defaults to **code mode** (text with syntax highlighting and live validation) — the easiest way to paste or hand-edit a JSON blob — and can be toggled to **tree mode** via the dropdown in the top-right corner of each editor, which is often more comfortable for exploring deeply nested objects.
-
-Malformed JSON fails validation on save with an explanatory error, rather than silently breaking at runtime when the connector tries to parse it.
-
-## Processor Pickers
-
-SearchProvider query processors, SearchProvider result processors, Search pre-query and post-result processors, and AIProvider default-for roles are chosen from a searchable dual-list widget. The left column shows available values from the model's CHOICES tuple; the right column shows what's currently selected. Order on the right reflects execution order at query time.
-
-![SearchProvider — query processor picker](images/ds-5587/admin-processor-picker.png)
-
-Any value not in the whitelist is rejected on save, so typos and renamed-in-code processors can't silently break things.
-
-# Managing Django Users
+For more details, watch this **[YouTube video on Django Administration](https://youtu.be/jCihWwrwS-w?si=QVtZXR7j9PRszQW1&t=174)**.
 
 ## Changing a User's Password
 
@@ -661,7 +579,7 @@ python manage.py changepassword <user_name>
 
 3. From the new tab that opens, click the `Admin` link to enter the Django Admin area. 
 
-3. On the SWIRL Admin Console dashboard, click **"Reset Lockout Attempts for User"** in the **Actions** card: ![SWIRL Reset Lockout, Step #2](images/ds-5587/admin-reset-lockout.png)
+3. In the top left corner, click on the “Reset Lockout Attempts for User” option: ![SWIRL Reset Lockout, Step #2](images/reset-lockout-admin.png)
 
 4. In the new tab that opens, select the “admin” user from the list of locked out accounts. (In the example above, we are unlocking the user `testuser01`.) With the user selected, click the `Reset` button on this page: ![SWIRL Reset Lockout, Step #3](images/reset-lockout-2.png)
 
@@ -673,9 +591,13 @@ python manage.py changepassword <user_name>
 
 ## Django Console
 
-The SWIRL Admin Console at [http://localhost:8000/admin/](http://localhost:8000/admin/) is described in detail in the [SWIRL Admin Console](#swirl-admin-console) section above. It is the primary web-based tool for managing users, groups, scheduled tasks, and every SWIRL configuration object.
+Django provides a **web-based UI** for managing **users, groups, crontabs, and more**.
 
-For an in-depth tutorial on the underlying Django admin framework, watch this **[YouTube playlist on Django Admin](https://www.youtube.com/watch?v=c_S0ZQs81XQ&list=PLOLrQ9Pn6cazhaxNDhcOIPYXt2zZhAXKO)**.
+  ![Django console](images/django_admin_console.png)
+
+Access it here: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+
+For an in-depth tutorial, watch this **[YouTube playlist on Django Admin](https://www.youtube.com/watch?v=c_S0ZQs81XQ&list=PLOLrQ9Pn6cazhaxNDhcOIPYXt2zZhAXKO)**.
 
 ## Django dbshell
 
@@ -903,6 +825,7 @@ Django provides **built-in authentication** with **User and Group objects**. The
 | `/swirl/groups/` | List Group objects & create new groups |
 | `/swirl/groups/id/` | Retrieve, delete, or edit a Group object |
 
-Alternatively, manage users and groups in the [SWIRL Admin Console](#swirl-admin-console) — see [Adding Normal Users](#adding-normal-users) and [Permissioning Normal Users](#permissioning-normal-users).
+Alternatively, use the **[Django Console](#django-console)**:
+  ![Django console user object](images/django_admin_console_user.png)
 
 For additional details, see **[User Authentication in Django](https://docs.djangoproject.com/en/4.0/topics/auth/)**.

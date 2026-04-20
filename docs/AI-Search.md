@@ -64,15 +64,17 @@ To integrate SWIRL with an Identity Provider (IDP) or Single Sign-On (SSO) syste
 
 ### Managing Authenticators
 
-Use the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) to view, edit, add or delete Authenticators — navigate to **Authenticators** under the **Configuration** category, or jump directly to [/admin/swirl/authenticator/](http://localhost:8000/admin/swirl/authenticator/):
+Use the Admin Console to view, edit, add or delete authenticators, here: [http://localhost:8000/admin/swirl](http://localhost:8000/admin/swirl)
 
-![SWIRL Admin Console — Authenticators list](images/ds-5587/admin-auth-list.png)
+![SWIRL Admin Console with Authenticators selected](images/swirl_admin_console_swirl_auth_selected.png)
 
-Click any Authenticator to view or edit it. For example, here is the default **Microsoft** authenticator:
+Click on "Authenticators" as shown to view the list of available ones, or add a new one:
+![SWIRL Admin Console, Authenticators list](images/swirl_admin_console_swirl_auth_list.png)
 
-![SWIRL Admin Console — Microsoft Authenticator edit form](images/ds-5587/admin-auth-microsoft.png)
+Click any of the Authenticators shown in the list to view or edit it. For example, here's the default Microsoft authenticator:
+![SWIRL Admin Console, Authenticators list](images/swirl_admin_console_swirl_auth_microsoft.png)
 
-Client secrets and other credentials are masked on display — see [Editing Secrets Safely](Admin-Guide.html#editing-secrets-safely) for details. Click **SAVE** at the bottom of the page to commit changes.
+Click the "SAVE" button at the bottom of the page to commit changes. 
 
 **Authenticator Fields**
 
@@ -106,8 +108,8 @@ OpenID Connect (OIDC) is a standard authentication protocol that enables secure 
 
 To configure an OpenID Connect authenticator:
 
-1. Navigate to the SWIRL Admin Console at [http://localhost:8000/admin/](http://localhost:8000/admin/) and open **Authenticators** — or jump to [/admin/swirl/authenticator/](http://localhost:8000/admin/swirl/authenticator/)
-2. View the available authenticators in the list
+1. Navigate to the Admin Console at [http://localhost:8000/admin/swirl](http://localhost:8000/admin/swirl)
+2. Click on **Authenticators** to view the available authenticators
 3. Either select an existing OpenID Connect authenticator to edit it, or click **Add Authenticator** to create a new one
 4. Configure the following fields with your OpenID Connect provider's information:
    - **`auth_uri`**: Your identity provider's authorization endpoint
@@ -133,9 +135,11 @@ GAI/LLMs in SWIRL serve four distinct roles:
 
 ## Managing AI Providers
 
-Use the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) to view, add, edit or delete AI Providers — navigate to **AIProviders** under the **Configuration** category, or jump directly to [/admin/swirl/aiprovider/](http://localhost:8000/admin/swirl/aiprovider/):
+Use the Admin Console to view, add, edit or delete AI Providers, here: <http://localhost:8000/admin/swirl>
+![SWIRL Admin Console top level with AIProviders highlighted](images/swirl_admin_console_swirl_aip_selected.png)
 
-![SWIRL Admin Console — AIProvider list](images/ds-5587/admin-aip-list.png)
+Click "AIProviders" as shown to access the full list:
+![SWIRL Admin Console viewing list of AIProviders](images/swirl_admin_console_aip_list.png)
 
 ## Supported Generative AI (GAI) and LLMs
 
@@ -159,15 +163,13 @@ For assistance with any of these or additional models, please [contact support](
 
 ## Editing AI Providers
 
-On the [AIProviders list](http://localhost:8000/admin/swirl/aiprovider/), click the name of a provider to open its edit form. Alternatively, check the checkbox next to one or more providers and use the **Action** dropdown above the list to apply a bulk action:
+From the [Admin Console](http://localhost:8000/admin/swirl) as shown above, click "AIProviders" to view the list of all available providers. Then, click on a specific AIProvider to edit it:
+![SWIRL Admin Console viewing list of AIProviders](images/swirl_admin_console_aip_list_selected.png)
 
-![SWIRL Admin Console — AIProvider list with row selected](images/ds-5587/admin-aip-list-selected.png)
+This will bring up an edit form:
+![SWIRL Admin Console editing an AIProvider](images/swirl_admin_console_edit_aip.png)
 
-The edit form renders with a JSON editor for the `config` field, choice-validated pickers for the `tags` and `defaults` fields, and masked `api_key` entry:
-
-![SWIRL Admin Console — AIProvider edit form](images/ds-5587/admin-aip-edit.png)
-
-Click **SAVE** at the bottom of the page to commit changes, or **Delete** to remove the provider entirely. Note: there is no "undo" option — deleted providers are lost forever. To temporarily disable a provider, uncheck its `active` property instead of deleting.
+Click the "SAVE" button at the bottom of the page to commit changes you make. 
 
 Click "Delete" to delete the provider entirely. Note: there is no "undo" option, deleted providers are lost forever. To save an AIProvider without having it used, set the `active` property to false (unchecked).
 
@@ -188,15 +190,13 @@ To switch the provider for a given role, use the `active` property. Only one AIP
 
 ### Via the Admin Console
 
-From the [AIProviders list](http://localhost:8000/admin/swirl/aiprovider/), click **ADD AIPROVIDER** in the top-right of the page:
+From the [Admin Console](http://localhost:8000/admin/swirl), click on AIProviders as shown above. Then, click "Add AIProvider": 
+![Admin Console showing AIProvider list with Add button highlighted](images/swirl_admin_console_aip_add.png)
 
-![SWIRL Admin Console — AIProvider list with ADD button](images/ds-5587/admin-aip-add.png)
+This will bring up a blank form for a new AIProvider:
+![Admin Console showing new AIProvider form](images/swirl_admin_console_aip_new.png)
 
-This opens a blank Add AIProvider form. The form supports a **Pre-fill from JSON** widget at the top — paste a JSON object exported from another SWIRL install (or the included [`preloaded.json`](https://github.com/swirlai/swirl-search/tree/main/AIProviders)) and click **Pre-fill form** to populate every matching field:
-
-![SWIRL Admin Console — Add AIProvider form](images/ds-5587/admin-aip-new.png)
-
-Complete the remaining fields (including `api_key`, which is always required on add), then click **SAVE**.
+Fill out the form and click the "SAVE" button at the bottom.
 
 ### Via Copy/Paste
 
@@ -313,31 +313,27 @@ Use the [Customizing Prompts](#customizing-the-ai-search-rag-prompt) procedure, 
 The following procedure below below to copy the standard prompts, modify them, then make them active. 
 New prompts won't be disturbed when SWIRL upgrades.
 
-1. Open the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) at [http://localhost:8000/admin/](http://localhost:8000/admin/) and navigate to **Prompts** under the **Configuration** category — or jump directly to [/admin/swirl/prompt/](http://localhost:8000/admin/swirl/prompt/):
+1. Open the Admin Console here: <http://localhost:8000/admin/swirl> 
 
-![SWIRL Admin Console — Prompts list](images/ds-5587/admin-prompts-list.png)
+2. click `Prompts` near the bottom of the page:
+![SWIRL Admin Console showing list of prompts](images/swirl_admin_console_swirl_prompts_selected.png)
 
-2. Click the `search_rag_standard` prompt (or `search_rag_deeplink` if using [Deep Linking](./User-Guide-Enterprise.md#deep-linked-citations)):
+3. Click the `search_rag_standard` or, if using [Deep Linking](./User-Guide-Enterprise.md#deep-linked-citations) `search_rag_deeplink` prompt: 
+![SWIRL Admin Console showing list of prompts with one selected](images/swirl_admin_console_prompts_list_selected.png)
 
-![SWIRL Admin Console — Prompts list with a row selected](images/ds-5587/admin-prompts-list-selected.png)
+4. Using the form, uncheck `active`. Click the "SAVE" button at the bottom of the page.
+![SWIRL Admin Console showing prompt edit with save selected](images/swirl_admin_console_prompt_edit_save.png)
 
-3. The edit form shows the prompt's `name`, `active` flag, `shared` flag, and the `prompt` / `note` / `footer` text sections:
+5. Change the `name` of the prompt to something appropriate like `my_custom_prompt`. Click the "Save as new" button at the bottom of the page. 
 
-![SWIRL Admin Console — Prompt edit form](images/ds-5587/admin-prompt-mainstream-edit.png)
+6. Set the prompt to `active`. Click the "SAVE" button at the bottom of the page to save the new prompt.
 
-4. Uncheck `active`, then click the **SAVE** button at the bottom of the page.
+7. If you don't wish to share this prompt with other users, set `shared` to `false`. 
 
-5. Change the `name` to something appropriate (for example, `my_custom_prompt`), then click **Save as new** at the bottom of the page:
+8. Modify the `prompt`, `note` and/or `footer` as needed, while retaining all critical instructions. For example, to instruct the LLM to use pirate-speak:
+![SWIRL Admin Console showing prompt footer edited for pirate-speak](images/swirl_admin_console_prompt_pirate.png)
 
-![SWIRL Admin Console — Prompt edit form, SAVE row](images/ds-5587/admin-prompt-edit-save.png)
-
-6. Open your new prompt, set it to `active`, and click **SAVE**.
-
-7. If you don't wish to share this prompt with other users, set `shared` to `false`.
-
-8. Modify the `prompt`, `note`, and/or `footer` text as needed, while retaining all critical instructions and template variables (`{header}`, `{query}`, etc.). For example, append tone guidance to the footer to adjust the response style.
-
-9. Click **SAVE** at the bottom of the page to save changes.
+9. Click "SAVE" at the bottom of the page to save changes. ![SWIRL Admin Console edit prompt save button selected](images/swirl_admin_console_prompt_edit_save.png)
 
 10. Try the new prompt from the Galaxy Search form!
 
