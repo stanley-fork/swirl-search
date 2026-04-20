@@ -253,13 +253,13 @@ To enable OAuth2 content search for M365 in the SWIRL Enterprise edition, locate
 
 SWIRL includes a preconfigured **Microsoft Authenticator**. 
 
-Open the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) at [http://localhost:8000/admin/](http://localhost:8000/admin/) and navigate to **Authenticators** under the **Configuration** category — or jump directly to [/admin/swirl/authenticator/](http://localhost:8000/admin/swirl/authenticator/):
+Use the Admin Console to configure it: <http://localhost:8000/admin/swirl>
 
-![SWIRL Admin Console — Authenticators list](images/ds-5587/admin-auth-list.png)
+Click on the "Authenticators" link: 
+![SWIRL Admin Console Authenticators link](images/swirl_admin_console_swirl_auth_selected.png)
 
-Click the **Microsoft** Authenticator to bring up the edit form:
-
-![SWIRL Admin Console — Microsoft Authenticator edit form](images/ds-5587/admin-auth-microsoft.png)
+Click the "Microsoft" Authenticator to bring up the edit form:
+![SWIRL Admin Console Authenticators link](images/swirl_admin_console_swirl_auth_microsoft.png)
 
 Make the following changes:
 * Update the Authenticator `client_id` value with Azure App `<application-id>`
@@ -465,17 +465,22 @@ The **Microsoft Teams desktop app must be open** before clicking a Teams Chat re
 
 **Enable Microsoft SearchProviders**
 
-1. Open the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) and navigate to **SearchProviders** under the **Configuration** category — or jump directly to [/admin/swirl/searchprovider/](http://localhost:8000/admin/swirl/searchprovider/):
+1. **Open the Admin Console**:  
+   [http://localhost:8000/admin/swirl/](http://localhost:8000/admin/swirl/)
 
-   ![SWIRL Admin Console — SearchProvider list](images/ds-5587/admin-sp-list.png)
+2. **Click SearchProviders**:  
+   ![SWIRL Admin Console showing SearchProvider option](images/swirl_admin_console_swirl_sp_selected.png)
 
-2. Click each M365 SearchProvider (Outlook Email, OneDrive, Teams, etc.) to open its edit form:
+3. This will bring up the list of SearchProviders:
+   ![SWIRL Admin Console showing list of SearchProviders](images/swirl_admin_console_sp_list.png)
+   
+4. Click each M365 SearchProvider like Outlook Email, OneDrive or Teams, to edit it. 
+   This will bring up the edit form: 
+   ![SWIRL Admin Console showing SearchProvider edit form](images/swirl_admin_console_edit_sp_1.png)
 
-   ![SWIRL Admin Console — SearchProvider edit form (top)](images/ds-5587/admin-sp-edit-top.png)
+5. Activate the provider by checking the "active" box. 
 
-3. Activate the provider by checking the **active** box.
-
-4. Click **SAVE** at the bottom of the page.
+6. Hit "SAVE" at the bottom of the page.
 
 # Authenticating with Microsoft
 

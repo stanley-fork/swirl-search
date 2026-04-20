@@ -21,8 +21,6 @@ nav_order: 24
 
 SWIRL provides health check and metrics endpoints for comprehensive monitoring in production deployments. These endpoints enable integration with standard monitoring tools like Kubernetes, Prometheus, and alerting systems, allowing operators to track system health, detect issues, and maintain service reliability.
 
-For a human-friendly view of the same data — a green/red health indicator, a per-queue table of depth, active tasks, and worker capacity — see the **Agents** page at [/admin/agents/](http://localhost:8000/admin/agents/), documented in [Agent Health](Admin-Guide.html#agent-health) in the Admin Guide. It pings the `health_check` queue on demand, caches the result for 60 seconds across admin pages, and provides one-click links to the raw JSON and Prometheus endpoints documented below.
-
 # Health Check Endpoints
 
 SWIRL exposes health check endpoints that report the status of critical system components, suitable for use as Kubernetes readiness and liveness probes.
@@ -255,8 +253,6 @@ tail -f logs/django.log
 tail -f logs/celery-worker.log
 tail -f logs/celery-beat.log
 ```
-
-For in-admin viewing without shell access, the **Log Viewer** at [/admin/logs/](http://localhost:8000/admin/logs/) (reachable from the Actions card on the admin dashboard) streams any log file with a file selector, line-count control, filter-text highlighting, and optional auto-refresh. See [Log Viewer](Admin-Guide.html#log-viewer) in the Admin Guide.
 
 # Key Metrics to Monitor
 

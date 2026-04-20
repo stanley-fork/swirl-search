@@ -135,6 +135,12 @@ To **start SWIRL**, run:
 python swirl.py start
 ```
 
+## Open the SWIRL Homepage
+
+Visit: [http://localhost:8000/swirl/](http://localhost:8000/swirl/)
+
+  ![SWIRL Homepage](images/swirl_frontpage.png)
+
 ## Open the Galaxy UI
 
 Visit: [http://localhost:8000](http://localhost:8000) or [http://localhost:8000/galaxy/](http://localhost:8000/galaxy/)
@@ -162,13 +168,14 @@ Click **Generate AI Insight**:
 
   ![SWIRL Results with RAG](images/swirl_40_community_rag.png)
 
-### Administer SWIRL
+### Manage SWIRL
 
-Open the [SWIRL Admin Console](./Admin-Guide#swirl-admin-console) at [http://localhost:8000/admin/](http://localhost:8000/admin/) to manage users, SearchProviders, AIProviders, Authenticators, Prompts, and more.
+Click the **profile avatar (top-right)** → Click **[Manage SWIRL](http://localhost:8000/swirl/)**.
 
 ### View Raw JSON Results
 
-- Open the Search endpoint: [http://localhost:8000/swirl/search/](http://localhost:8000/swirl/search/)
+- Click **Search** under **API** in the **Manage SWIRL** page.  
+- Open: [http://localhost:8000/swirl/search/](http://localhost:8000/swirl/search/)  
 - Click **`result_url`** to view the full **JSON response**:
 
   ![SWIRL JSON response](images/swirl_results_mixed_1.png)
