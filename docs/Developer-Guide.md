@@ -97,17 +97,18 @@ To retrieve only new results, use `Search.new_results_url` or select a **NewItem
 
 # API Examples
 
-All SWIRL API endpoints require authentication. The examples below use token-based authentication. To obtain a token, log in first:
+All SWIRL API endpoints require authentication. The examples below use HTTP Basic Authentication — the simplest approach for scripts and command-line tools. Replace `admin:password` with your actual credentials.
+
+{: .highlight }
+**Tip:** In interactive shells, quote the password with single quotes to prevent expansion of special characters like `!` (e.g. `-u 'admin:my!pass'`). In Python, prefer loading credentials from environment variables over hardcoding them.
 
 ## Authentication
 
 **curl:**
 
 ```shell
-# Get a session cookie by logging in
-curl -c cookies.txt -X POST http://localhost:8000/swirl/login/ \
-  -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "password"}'
+# Every request passes Basic Auth credentials via -u
+curl -u admin:password http://localhost:8000/swirl/searchproviders/
 ```
 
 **Python:**
@@ -117,13 +118,11 @@ import requests
 
 BASE_URL = "http://localhost:8000"
 session = requests.Session()
+session.auth = ("admin", "password")  # HTTP Basic Auth applied to every request
 
-# Log in and store the session cookie
-response = session.post(f"{BASE_URL}/swirl/login/", json={
-    "username": "admin",
-    "password": "password"
-})
-# The session object now carries the authentication cookie for subsequent requests
+# Sanity check
+response = session.get(f"{BASE_URL}/swirl/searchproviders/")
+response.raise_for_status()
 ```
 
 ## Running a Search
@@ -132,19 +131,19 @@ response = session.post(f"{BASE_URL}/swirl/login/", json={
 
 ```shell
 # Create a search and get the search ID
-curl -b cookies.txt -X POST http://localhost:8000/swirl/search/ \
+curl -u admin:password -X POST http://localhost:8000/swirl/search/ \
   -H "Content-Type: application/json" \
   -d '{"query_string": "artificial intelligence"}'
 
 # Poll for results (replace 1 with your search ID)
-curl -b cookies.txt http://localhost:8000/swirl/results/?search_id=1
+curl -u admin:password "http://localhost:8000/swirl/results/?search_id=1"
 ```
 
 **curl — synchronous (waits for results):**
 
 ```shell
 # Run a search and get results in one call
-curl -b cookies.txt "http://localhost:8000/swirl/search/?qs=artificial+intelligence"
+curl -u admin:password "http://localhost:8000/swirl/search/?qs=artificial+intelligence"
 ```
 
 **Python — synchronous search:**
@@ -202,7 +201,7 @@ print(f"Got {len(results.get('results', []))} results")
 
 ```shell
 # Search only specific providers by name
-curl -b cookies.txt -X POST http://localhost:8000/swirl/search/ \
+curl -u admin:password -X POST http://localhost:8000/swirl/search/ \
   -H "Content-Type: application/json" \
   -d '{
     "query_string": "machine learning",
@@ -225,13 +224,13 @@ response = session.post(f"{BASE_URL}/swirl/search/", json={
 
 ```shell
 # Run a search with RAG in one call
-curl -b cookies.txt "http://localhost:8000/swirl/search/?qs=what+is+retrieval+augmented+generation&rag=true"
+curl -u admin:password "http://localhost:8000/swirl/search/?qs=what+is+retrieval+augmented+generation&rag=true"
 ```
 
 **curl — RAG with timeout override:**
 
 ```shell
-curl -b cookies.txt "http://localhost:8000/swirl/search/?qs=summarize+recent+AI+advances&rag=true&rag_timeout=120"
+curl -u admin:password "http://localhost:8000/swirl/search/?qs=summarize+recent+AI+advances&rag=true&rag_timeout=120"
 ```
 
 **Python — RAG search:**
@@ -244,39 +243,58 @@ response = session.get(f"{BASE_URL}/swirl/search/", params={
 })
 rag_results = response.json()
 
-# The RAG response includes the AI-generated insight
-info = rag_results.get("info", {})
-search_info = info.get("search", {})
-print("AI Insight:", search_info.get("rag_response", "No RAG response"))
+# The AI-generated summary is returned as a result row whose author is
+# the SWIRL RAG processor. Pull it out of the results list.
+RAG_AUTHOR = "SWIRL RAG AI Results Processor"
+ai_summary = next(
+    (r for r in rag_results.get("results", []) if r.get("author") == RAG_AUTHOR),
+    None,
+)
+if ai_summary:
+    print("AI Summary:", ai_summary.get("body", "(empty)"))
 
-# Citations are included in the results
+# Citations are the remaining rows in the same results list
 for result in rag_results.get("results", []):
+    if result.get("author") == RAG_AUTHOR:
+        continue
     print(f"  - {result['title']} ({result['url']})")
 ```
 
 ## Enterprise RAG Search API
 
-For Enterprise Edition, the dedicated RAG search endpoint provides additional control:
+In SWIRL Enterprise, `/swirl/rag-search/` generates an AI summary over an **existing** search — it is not a combined search+RAG endpoint. Call it in two steps: create the search first, then POST its `search_id` (and optionally a `result_list` of result row numbers to summarize) to `/swirl/rag-search/`. Omit `result_list` to summarize all results for that search.
 
 **curl:**
 
 ```shell
-curl -b cookies.txt -X POST http://localhost:8000/swirl/rag-search/ \
+# 1. Create a search and note the id from the response
+curl -u admin:password -X POST http://localhost:8000/swirl/search/ \
   -H "Content-Type: application/json" \
-  -d '{
-    "query_string": "summarize key findings on climate change",
-    "searchprovider_list": ["Google News", "Arxiv.org"]
-  }'
+  -d '{"query_string": "summarize key findings on climate change",
+       "searchprovider_list": ["Google News", "Arxiv.org"]}'
+# → {"id": 42, ...}
+
+# 2. Generate a RAG summary over that search
+curl -u admin:password -X POST http://localhost:8000/swirl/rag-search/ \
+  -H "Content-Type: application/json" \
+  -d '{"search_id": 42, "result_list": [1, 2, 3]}'
 ```
 
 **Python:**
 
 ```python
-response = session.post(f"{BASE_URL}/swirl/rag-search/", json={
+# Step 1 — create the search
+r = session.post(f"{BASE_URL}/swirl/search/", json={
     "query_string": "summarize key findings on climate change",
-    "searchprovider_list": ["Google News", "Arxiv.org"]
+    "searchprovider_list": ["Google News", "Arxiv.org"],
 })
-rag_result = response.json()
+search_id = r.json()["id"]
+
+# Step 2 — summarize selected result rows (or omit result_list for all)
+r = session.post(f"{BASE_URL}/swirl/rag-search/", json={
+    "search_id": search_id,
+    "result_list": [1, 2, 3],
+})
 ```
 
 ## Retrieving Results with Different Mixers
@@ -285,16 +303,16 @@ rag_result = response.json()
 
 ```shell
 # Default relevancy-ranked results
-curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1"
+curl -u admin:password "http://localhost:8000/swirl/results/?search_id=1"
 
 # Date-sorted results
-curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1&result_mixer=DateMixer"
+curl -u admin:password "http://localhost:8000/swirl/results/?search_id=1&result_mixer=DateMixer"
 
 # Round-robin across sources
-curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1&result_mixer=Stack2Mixer"
+curl -u admin:password "http://localhost:8000/swirl/results/?search_id=1&result_mixer=Stack2Mixer"
 
 # Paginate results (10 per page)
-curl -b cookies.txt "http://localhost:8000/swirl/results/?search_id=1&page=2"
+curl -u admin:password "http://localhost:8000/swirl/results/?search_id=1&page=2"
 ```
 
 **Python:**
@@ -329,7 +347,7 @@ while True:
 
 ```shell
 # List all active SearchProviders
-curl -b cookies.txt http://localhost:8000/swirl/searchproviders/
+curl -u admin:password http://localhost:8000/swirl/searchproviders/
 ```
 
 **Python:**
