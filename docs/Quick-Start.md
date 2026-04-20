@@ -121,8 +121,7 @@ nav_order: 3
 
 ## 5. Managing SWIRL  
 
-- Click the **profile avatar** in the upper-right corner of the **Galaxy UI**.  
-- Select **[Manage SWIRL](http://localhost:8000/swirl/)** to explore additional features.  
+- Open the [SWIRL Admin Console](./Admin-Guide#swirl-admin-console) at **[http://localhost:8000/admin/](http://localhost:8000/admin/)** to manage users, SearchProviders, AIProviders, Authenticators, Prompts, and more.
 - To view raw search results in JSON format:
   - Go to **[http://localhost:8000/swirl/search/](http://localhost:8000/swirl/search/)**
   - Click on the `result_url` link to view the full JSON response.

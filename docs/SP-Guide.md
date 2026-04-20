@@ -28,27 +28,23 @@ Additionally, **inactive** SearchProviders for **Google Web Search and SWIRL Doc
 
 # Preloaded SearchProviders
 
-To view the list of preloaded SearchProviders, use the admin console: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+To view the list of preloaded SearchProviders, open the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) at [http://localhost:8000/admin/](http://localhost:8000/admin/) and navigate to the **SearchProviders** page under the **Configuration** category — or jump directly to [/admin/swirl/searchprovider/](http://localhost:8000/admin/swirl/searchprovider/):
 
-![SWIRL Admin Console showing SearchProvider link](images/swirl_admin_console_sp_selected.png)
-
-Click the link `SearchProviders` at the bottom, left of the screen, under the `SWIRL` menu. This will bring up a list of the current SearchProviders:
-
-![SWIRL Admin Console showing SearchProvider list](images/swirl_admin_console_sp_list.png)
+![SWIRL Admin Console — SearchProvider list](images/ds-5587/admin-sp-list.png)
 
 # Editing a SearchProvider
 
-From the admin console click on a SearchProvider to edit it.
+From the SearchProvider list, click a SearchProvider name to open its edit form:
 
-![SWIRL Admin Console showing SearchProvider list](images/swirl_admin_console_sp_list.png)
+![SWIRL Admin Console — SearchProvider list](images/ds-5587/admin-sp-list.png)
 
-Use the form that appears to make changes:
+Use the form that appears to make changes. The form is organized into collapsible sections (Identity, Connection, Query, Results, Advanced, Audit):
 
-![SWIRL Admin Console showing SearchProvider editing](images/swirl_admin_console_edit_sp_1.png)
+![SWIRL Admin Console — SearchProvider edit form (top)](images/ds-5587/admin-sp-edit-top.png)
 
-Click the "SAVE" button, at the bottom of the form, to commit changes. 
+Click the **SAVE** button at the bottom of the form to commit changes:
 
-![SWIRL Admin Console showing SearchProvider editing with SAVE button](images/swirl_admin_console_edit_sp_2.png)
+![SWIRL Admin Console — SearchProvider edit form (bottom with SAVE)](images/ds-5587/admin-sp-edit-bottom.png)
 
 ## Cloning a SearchProvider
 
@@ -63,7 +59,7 @@ The "Save as new" button is pictured above.
 
 To activate a SearchProvider [edit it using the Admin Console](#editing-a-searchprovider) as shown above. Then check the `active` field, if it is not already.
 
-![SWIRL Admin Console showing SearchProvider active setting checked](images/swirl_admin_console_activate_sp.png)
+![SWIRL Admin Console — SearchProvider Active checkbox](images/ds-5587/admin-sp-activate.png)
 
 Click the "SAVE" button, at the bottom of the page, to commit this change.
 
@@ -97,15 +93,15 @@ To activate a Google PSE SearchProvider:
 
 ## Using the Admin Console
 
-From the admin console, go to the SearchProvider page:
+From the [SWIRL Admin Console](http://localhost:8000/admin/), navigate to the **Configuration** category and click **SearchProviders**, then click the **"Add SearchProvider"** button in the top-right of the list page.
 
-![SWIRL admin console showing SearchProvider](images/swirl_admin_console_sp_selected.png)
+At the top of the Add SearchProvider form is a **Pre-fill from JSON** widget. Pasting a SearchProvider JSON object here — for example, one exported from another SWIRL install via the **"Export selected as JSON"** admin action, or pulled from a SWIRL [`preloaded.json`](https://github.com/swirlai/swirl-search/tree/main/SearchProviders) fixture — and clicking **Pre-fill form** populates every matching field below. Secret fields (`credentials`, `eval_credentials`) are intentionally skipped so pasted JSON from another install never leaks credentials into the form.
 
-Click the "Add SearchProvider" button at the top/right of the SearchProvider list that appears:
+![SearchProvider add form with JSON pre-fill widget](images/ds-5587/admin-searchprovider-add.png)
 
-![SWIRL admin console showing Add SearchProvider](images/swirl_admin_console_sp_list_add.png)
+After pre-filling (or starting from scratch), review and adjust the fields, then click **Save**. Complex JSON fields like `query_template_json`, `http_request_headers`, `page_fetch_config_json`, and `config` render with a full JSON editor that validates structure before save. Processor lists (`query_processors`, `result_processors`) use a searchable dual-list picker — see [Processor Pickers](Admin-Guide.html#processor-pickers) in the Admin Guide.
 
-Fill in the field(s) with the appropriate values for your SearchProvider. [contact SWIRL](mailto:hello@swirlaiconnect.com) for assistance.
+[Contact SWIRL](mailto:hello@swirlaiconnect.com) for assistance with specific connectors.
 
 ## Via Copy/Paste
 
@@ -195,7 +191,7 @@ Use the [Admin Console](#using-the-admin-console) to [edit the SearchProvider](#
 "groups": ["some_new_group"]
 ```
 
-![SWIRL Admin Console showing SearchProvider group and shared options](images/swirl_admin_console_edit_sp_groups.png)
+![SWIRL Admin Console — SearchProvider Groups and Shared options](images/ds-5587/admin-sp-groups.png)
 
 3. Click the SAVE button at the bottom of the form to save changes!
 
