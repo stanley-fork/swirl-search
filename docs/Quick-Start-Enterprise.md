@@ -75,29 +75,32 @@ Deploy SWIRL quickly and privately, anywhere Docker runs!
 {: .warning }
 To use **Generate AI Insights** (RAG) or **AI Search Assistant**, at least one AI provider must be activated.
 
-1. Go to [http://localhost:8000/swirl/aiproviders/](http://localhost:8000/swirl/aiproviders/).
-2. Review the **pre-loaded AI providers**.
-3. To edit a provider, add its ID to the URL. Example:  
-   <http://localhost:8000/swirl/aiproviders/16/>
+1. Open the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) at [http://localhost:8000/admin/](http://localhost:8000/admin/) and navigate to **AIProviders** under the **Configuration** category — or jump directly to [/admin/swirl/aiprovider/](http://localhost:8000/admin/swirl/aiprovider/).
 
-    ![SWIRL AI Provider](images/swirl_aip_1.png)
+2. Review the **pre-loaded AI providers** in the list.
 
-4. Use the **"Raw Data"** form at the bottom to make changes, then click **PUT** to save.
+    ![SWIRL Admin Console — AIProvider list](images/ds-5587/admin-aip-list.png)
 
-    To function correctly, an AI provider must:
+3. Click a provider's name to open its edit form:
 
-    - Have `"active": true` set.
-    - Include `"rag"` and/or `"chat"` in the `"tags"` list.
-    - Include `"rag"` and/or `"chat"` in the `"defaults"` list.
-    - Have a valid API key (if required).
+    ![SWIRL Admin Console — AIProvider edit form](images/ds-5587/admin-aip-edit.png)
 
-5. To create a new provider, **copy an existing one** and paste it as a new entry.
+4. To function correctly, an AI provider must:
 
-    To use **different AI providers** for **RAG and AI Search Assistant**, adjust the `"defaults"` list:
+    - Have **Active** checked.
+    - Include `rag` and/or `chat` in the `tags` list.
+    - Include `rag` and/or `chat` in the `defaults` list.
+    - Have a valid **API key** entered in the `api_key` field (the field is masked on display — see [Editing Secrets Safely](Admin-Guide.html#editing-secrets-safely)).
 
-    - Example:  
-      - **OpenAI GPT-4** → `"defaults": ["rag"]`
-      - **Azure/OpenAI GPT-4o** → `"defaults": ["chat"]`
+5. To create a new provider, click **ADD AIPROVIDER** in the top-right of the list page and fill out the form. The **Pre-fill from JSON** widget at the top of the add form lets you paste an existing AIProvider JSON (for example from another install) and populate every matching field at once.
+
+    To use **different AI providers** for **RAG** and **AI Search Assistant**, adjust the `defaults` list:
+
+    - Example:
+      - **OpenAI GPT-4** → `defaults: ["rag"]`
+      - **Azure/OpenAI GPT-4o** → `defaults: ["chat"]`
+
+    Click **SAVE** at the bottom of the form to commit changes.
 
 6. Once an active provider for **RAG** exists, click **Generate AI Insights**.  
     ![SWIRL Results with RAG](images/swirl_40_community_rag.png)
@@ -120,9 +123,7 @@ To use **Generate AI Insights** (RAG) or **AI Search Assistant**, at least one A
   - [Upload a branding configuration](Admin-Guide.html#changing-the-galaxy-logos-and-branding) including logos and Galaxy control labels
   - [Customize the AI Search RAG prompt](AI-Search.html#customizing-the-ai-search-rag-prompt) and the [AI Search Assistant prompt](AI-Search-Assistant.html#customizing-the-ai-search-assistant-prompts)
 
-- Manage SWIRL via **Galaxy UI**:
-  - Click the profile avatar (top-right corner).
-  - Click **Manage SWIRL** ([http://localhost:8000/swirl/](http://localhost:8000/swirl/)).
+- Administer SWIRL via the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) at **[http://localhost:8000/admin/](http://localhost:8000/admin/)** — the single web-based tool for managing users, SearchProviders, AIProviders, Authenticators, Prompts, Branding, schedules, and more.
 
 ## Microsoft 365 Integration
 
@@ -169,14 +170,14 @@ Note any errors, and feel free to [contact support](mailto:hello@swirlaiconnect.
 
 ### Migrating OpenAI/Azure OpenAI settings
 
-1. Go to the `/swirl/aiproviders/` endpoint in the SWIRL Enterprise installation.
+1. Open the [AIProviders page](http://localhost:8000/admin/swirl/aiprovider/) in the SWIRL Admin Console.
 
-![SWIRL AI Providers](images/swirl_aiproviders.png)
+![SWIRL Admin Console — AIProvider list](images/ds-5587/admin-aip-list.png)
 
-2. Locate the OpenAI or AzureOpenAI preloaded configuration.
+2. Click the OpenAI or AzureOpenAI preloaded configuration to open its edit form.
 
-3. Copy the API key from the Community `.env` file, or the appropriate environment 
-variable, to the `credentials` field in the Enterprise AI Provider. For example:
+3. Copy the API key from the Community `.env` file, or the appropriate environment
+variable, and paste it into the `api_key` field in the Enterprise AI Provider. For example:
 
 For OpenAI:
 ```

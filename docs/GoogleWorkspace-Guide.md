@@ -171,12 +171,11 @@ Click the "Save" button - or "Cancel", if you changed values on this screen - af
 
 SWIRL includes a preconfigured **Google Workspace Authenticator**, here: <http://localhost:8000/swirl/authenticators/Google/>
 
-Use the Admin Console to configure it: <http://localhost:8000/admin/swirl>
+Open the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) at [http://localhost:8000/admin/](http://localhost:8000/admin/) and navigate to **Authenticators** under the **Configuration** category — or jump directly to [/admin/swirl/authenticator/](http://localhost:8000/admin/swirl/authenticator/):
 
-Click on the "Authenticators" link: 
-![SWIRL Admin Console Authenticators link](images/swirl_admin_console_swirl_auth_selected.png)
+![SWIRL Admin Console — Authenticators list](images/ds-5587/admin-auth-list.png)
 
-Click the "Google Workspace" Authenticator to bring up the edit form. 
+Click the **Google** Authenticator to open its edit form.
 
 Make the following changes:
 * Update the Authenticator `client_id`
@@ -304,20 +303,15 @@ SWIRL includes pre-configured **SearchProviders** for:
 
 To **Enable Google Workplaces** do the following:
 
-1. **Open the Admin Console**:  
-   [http://localhost:8000/admin/swirl/](http://localhost:8000/admin/swirl/)
+1. Open the [SWIRL Admin Console](Admin-Guide.html#swirl-admin-console) and navigate to **SearchProviders** under the **Configuration** category — or jump directly to [/admin/swirl/searchprovider/](http://localhost:8000/admin/swirl/searchprovider/):
 
-2. **Click SearchProviders**:  
-   ![SWIRL Admin Console showing SearchProvider option](images/swirl_admin_console_swirl_sp_selected.png)
+   ![SWIRL Admin Console — SearchProvider list](images/ds-5587/admin-sp-list.png)
 
-3. This will bring up the list of SearchProviders:
-   ![SWIRL Admin Console showing list of SearchProviders](images/swirl_admin_console_sp_list.png)
+2. Click each Google Workspace SearchProvider to open its edit form.
 
-4. Click each Google Workspace SearchProvider to edit it. 
+3. Check the **active** field.
 
-5. Check the "active" field. 
-
-6. Click the "SAVE" button at the bottom of the page.
+4. Click the **SAVE** button at the bottom of the page.
 
 # Login to SWIRL using Google Workspace
 
