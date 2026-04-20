@@ -192,7 +192,6 @@ The SWIRL application is designed to be deployed **behind a reverse-proxy** for 
 
 **Recommended Reverse-Proxy Solutions**
 
-- [HA Proxy](https://www.haproxy.org/)  
 - [Nginx](https://nginx.org/en/)  
 - [Azure Application Gateway](https://azure.microsoft.com/en-us/products/application-gateway)  
 - [AWS Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/)  
