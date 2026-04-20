@@ -1186,7 +1186,7 @@ DELIMITER ',' CSV HEADER;
 
 ## Enron Email Data Set
 
-This dataset includes 500,000+ emails from 150 former Enron employees. It is available on [Kaggle](https://www.kaggle.com/datasets/wcukierski/enron-email-dataset) and [Carnegie Mellon](https://www.cs.cmu.edu/~./enron/).
+This dataset includes 500,000+ emails from 150 former Enron employees. It is available on [Kaggle](https://www.kaggle.com/datasets/wcukierski/enron-email-dataset) and [Carnegie Mellon](https://www.cs.cmu.edu/~enron/).
 
 **Loading into Elastic or OpenSearch**
 
